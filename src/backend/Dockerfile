@@ -8,10 +8,12 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# RUN npm install
+# 전역 설치 및 패키지 업데이트
 RUN npm install -g npm-check-updates && \
-    ncu -u && \
-    npm install
+    ncu -u
+
+# 의존성 설치
+RUN npm install --legacy-peer-deps
 
 COPY . .
 COPY *.png /photo/
@@ -38,15 +40,12 @@ COPY --from=builder /app/package*.json .
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/*.png /photo/
 
-# RUN npm install --only-production
-RUN npm install -g npm-check-updates && \
-    ncu -u && \
-    npm install --only-production
+# 의존성 설치
+RUN npm install --only=production --legacy-peer-deps
 
 # prisma
 COPY ./prisma ./prisma
-EXPOSE 3001
+EXPOSE 5555
+
 
 CMD ["npm", "run", "start:migrate:prod"]
-
-#----------------------------------------#

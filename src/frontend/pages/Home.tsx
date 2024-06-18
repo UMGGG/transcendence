@@ -7,7 +7,7 @@ import App from "../srcs/App";
 // import axiosApi from "@/srcs/AxiosInterceptor";
 // import { refreshToken, setItems } from "@/srcs/SocketRefresh";
 // import { socketRefreshToken } from "@/srcs/SocketRefresh";
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import { JwtPayload } from "./callback";
 
 // type JwtPayload = {
@@ -43,8 +43,8 @@ function Home() {
           })
           .then((json) => {
             localStorage.setItem("access_token", json.access_token);
-            const jwtDecode = jwt_decode<JwtPayload>(json.access_token);
-            localStorage.setItem("access_token_exp", jwtDecode.exp.toString());
+            const jwtDecodes: JwtPayload = jwtDecode(json.access_token);
+            localStorage.setItem("access_token_exp", jwtDecodes.exp.toString());
             setValidToken(true); // success
           })
           .catch((error) => {

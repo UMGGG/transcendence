@@ -1,6 +1,6 @@
 import { JwtPayload } from "@/pages/callback";
 import axios, { AxiosError } from "axios";
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import Router from "next/router";
 
 async function refreshToken(): Promise<any> {
@@ -10,8 +10,8 @@ async function refreshToken(): Promise<any> {
     .then((res) => {
       const access_token = res.data.access_token;
       localStorage.setItem("access_token", access_token);
-      const jwtDecode = jwt_decode<JwtPayload>(access_token);
-      localStorage.setItem("access_token_exp", jwtDecode.exp.toString());
+      const jwtDecodes: JwtPayload = jwtDecode(access_token);
+      localStorage.setItem("access_token_exp", jwtDecodes.exp.toString());
     })
     .catch(function (error) {
       if (error.response && error.response.status === 401) {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import styles from "../styles/CallBackStyle.module.css";
 
 export type JwtPayload = {
@@ -56,8 +56,8 @@ useEffect( () => {
       ).json();
       localStorage.setItem("access_token", data.access_token);
       // Decode token to get expired time
-      const jwtDecode = jwt_decode<JwtPayload>(data.access_token);
-      localStorage.setItem("access_token_exp", jwtDecode.exp.toString());
+      const jwtDecodes: JwtPayload = jwtDecode(data.access_token);
+      localStorage.setItem("access_token_exp", jwtDecodes.exp.toString());
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("is2fa", "false");
       localStorage.setItem("avatar",`/api/user/${data.id}/photo?timestamp=${Date.now()}`);
@@ -111,8 +111,8 @@ useEffect( () => {
       }
       console.log("인증 결과:", responseData);
       localStorage.setItem("access_token", responseData.access_token);
-      const jwtDecode = jwt_decode<JwtPayload>(responseData.access_token);
-      localStorage.setItem("access_token_exp", jwtDecode.exp.toString());
+      const jwtDecodes: JwtPayload = jwtDecode(responseData.access_token);
+      localStorage.setItem("access_token_exp", jwtDecodes.exp.toString());
       localStorage.setItem("avatar", `/api/user/${userId}/photo?timestamp=${Date.now()}`);
       localStorage.setItem("isLoggedIn", "true");
       setIsReady(true);

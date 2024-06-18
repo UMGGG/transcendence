@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import axiosApi from "./AxiosInterceptor";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 import "../pages/index.css";
 import styles from "../styles/MyProfileStyle.module.css";
 import { JwtPayload } from "@/pages/callback";
@@ -87,8 +87,8 @@ function MyProfile({
       ).then((response)=>{
         const resData = response.data;
         localStorage.setItem("access_token",resData.access_token);
-        const jwtDecode = jwt_decode<JwtPayload>(resData.access_token);
-        localStorage.setItem("access_token_exp", jwtDecode.exp.toString());
+        const jwtDecodes: JwtPayload = jwtDecode(resData.access_token);
+        localStorage.setItem("access_token_exp", jwtDecodes.exp.toString());
         setQRUrl("http://localhost/api/2fa/qrcode");
       })
       .catch((error:any) => {
